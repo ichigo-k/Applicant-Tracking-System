@@ -1,0 +1,26 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+
+# IDE and editor configs
+.idea
+.vscode
+*.iml
+
+# Maven build output (rebuilt inside Docker)
+target
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Docs
+HELP.md
+README.md
+
+# Windows Maven wrapper (not needed on Linux containers)
+mvnw.cmd
