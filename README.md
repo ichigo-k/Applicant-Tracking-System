@@ -1,4 +1,43 @@
-# Applicant Tracking System - Aihrly Take-Home
+# Applicant Tracking System
+
+A REST API for running a hiring pipeline. Teams post jobs, candidates apply, and recruiters move each application through a strict stage workflow, adding notes and scores along the way. Moving an application to `HIRED` or `REJECTED` triggers an async notification.
+
+Built with Java 21, Spring Boot, Spring Data JPA and PostgreSQL. Originally written as a backend take-home for Aihrly.
+
+## Highlights
+
+- **Enforced stage machine.** Each stage decides which moves are legal, so illegal jumps are rejected:
+
+  ```
+  APPLIED → SCREENING → INTERVIEW → OFFER → HIRED
+      └──────────┴───────────┴─────────┴──→ REJECTED
+  ```
+
+- **Full stage history** for every application.
+- **Recruiter notes** and three separate scores: culture fit, interview and assessment.
+- **Async notifications** using `@Async`. Reaching a terminal stage writes a row to `notifications` without blocking the request.
+- **Team-member attribution** through the `X-Team-Member-Id` header.
+- **One-call seed endpoint** that creates sample team members, jobs and applications.
+- **Swagger UI**, DTOs mapped with MapStruct, validation, central exception handling, and unit and integration tests (H2 + Mockito).
+
+## API
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `POST` | `/api/jobs` | Create a job |
+| `GET` | `/api/jobs` | List jobs |
+| `GET` | `/api/jobs/{id}` | Get a job |
+| `POST` | `/api/jobs/{jobId}/applications` | Apply to a job |
+| `GET` | `/api/jobs/{jobId}/applications` | List applications for a job |
+| `GET` | `/api/applications/{id}` | Get an application with its history |
+| `PATCH` | `/api/applications/{id}/stage` | Move to the next stage |
+| `POST` / `GET` | `/api/applications/{id}/notes` | Add or list notes |
+| `PUT` | `/api/applications/{id}/scores/{culture-fit,interview,assessment}` | Set a score |
+| `GET` | `/api/seed` | Load sample data |
+
+Full interactive docs are at `/swagger-ui.html`.
+
+---
 
 ## Running locally
 
